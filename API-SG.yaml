@@ -18,6 +18,7 @@ info:
   license:
     name: UAN - DGS. All rights reserved
     url: 'https://piida.uan.mx/legal/politica-de-privacidad'
+  summary: API DE SERVICIOS GENERALES
 servers:
   - url: 'https://api-servicios.piida.uan.mx/v1'
     description: Production
@@ -49,32 +50,32 @@ paths:
               schema:
                 $ref: '#/components/schemas/Personal'
               examples:
-                example-1:
-                  value: 2
-                  status: success
-                  data:
-                    meta:
-                      count: 2
-                      total: 65536
-                      offset: 43
-                      limit: 2
-                    fields:
-                      - no_trab
-                      - rfc
-                      - curp
-                      - appat
-                      - apmat
-                      - nombres
-                      - fecha_nac
-                      - sexo
-                      - no_empleado
-                      - estatus
-                      - tipo_empleado
-                      - tipo_plaza
-                      - id_adscripcion
-                      - adscripcion
-                    entries:
-                      - - 14391
+                Ejemplo-plazas:
+                  value:
+                    status: success
+                    data:
+                      meta:
+                        count: 2
+                        total: 65536
+                        offset: 43
+                        limit: 2
+                      fields:
+                        - no_trab
+                        - rfc
+                        - curp
+                        - appat
+                        - apmat
+                        - nombres
+                        - fecha_nac
+                        - sexo
+                        - no_empleado
+                        - estatus
+                        - tipo_empleado
+                        - tipo_plaza
+                        - id_adscripcion
+                        - adscripcion
+                      entries:
+                        - 14391
                         - AIRT6710235K5
                         - AIRT671023MDFCRS03
                         - LADRON DE GUEVARA
@@ -88,7 +89,7 @@ paths:
                         - DOCENTE
                         - 360
                         - UNIDAD ACADEMICA DE CIENCIAS QUIMICO BIOLOGICAS Y FARMACEUTICAS
-                      - - 14392
+                        - 14392
                         - TRBA7411235K5
                         - TRBA7411235K5CRS53
                         - DE LA TEJERA
@@ -102,6 +103,122 @@ paths:
                         - DOCENTE
                         - 360
                         - UNIDAD ACADEMICA DE CIENCIAS QUIMICO BIOLOGICAS Y FARMACEUTICAS
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                x-examples:
+                  example-1:
+                    status: fail
+                    code: no_auth
+                    data:
+                      message: No has iniciado sesión.
+              examples:
+                Ejemplo-401-Unauthorized:
+                  value:
+                    status: fail
+                    code: no_auth
+                    data:
+                      message: No has iniciado sesión.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                x-examples:
+                  example-1:
+                    status: error
+                    code: no_authz|AccessDeniedHttpException
+                    data:
+                      message: No tienes permisos para realizar esta acción
+              examples:
+                Ejemplo-403-Forbidden:
+                  value:
+                    status: error
+                    code: no_authz|AccessDeniedHttpException
+                    data:
+                      message: No tienes permisos para realizar esta acción
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                x-examples:
+                  example-1:
+                    status: error
+                    code: no_authz|AccessDeniedHttpException
+                    data:
+                      message: No tienes permisos para realizar esta acción
+              examples:
+                Ejemplo-404-Not_found:
+                  value:
+                    status: error
+                    code: no_plaza|no_empleado|no_alumno|no_matricula
+                    data:
+                      message: El elemento que buscas no se ha encontrado
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                x-examples:
+                  example-1:
+                    status: error
+                    code: no_expediente
+                    data:
+                      message: Este docente no tiene su expediente digital capturado
+              examples:
+                Ejemplo-409-Conflict:
+                  value:
+                    status: error
+                    code: no_expediente
+                    data:
+                      message: Este docente no tiene su expediente digital capturado
       operationId: get-rh-plazas
       description: Devuelve una colección de registros de empleados en estatus `ACTIVO`.
       parameters:
@@ -128,22 +245,143 @@ paths:
               schema:
                 $ref: '#/components/schemas/Personal'
               examples:
-                example-1:
+                Ejemplo-NO_PLAZA:
                   value:
-                    no_trab: 1
-                    rfc: string
-                    curp: string
-                    appat: string
-                    apmat: string
-                    nombres: string
-                    fecha_nac: '1985-07-23'
-                    sexo: M
-                    no_empleado: 0
-                    estatus: ACTIVO
-                    tipo_empleado: BASE
-                    tipo_plaza: ADMINISTRATIVO
-                    id_adscripcion: 0
-                    adscripcion: string
+                    status: success
+                    data:
+                      no_trab: 14391
+                      rfc: AIRT6710235K5
+                      curp: AIRT671023MDFCRS03
+                      appat: LADRON DE GUEVARA
+                      apmat: DE LA TEJERA
+                      nombres: ASUNCIÓN MARIA DEL CONSUELO
+                      fecha_nac: '1967-10-23'
+                      sexo: F
+                      no_empleado: 53255
+                      estatus: ACTIVO
+                      tipo_empleado: CONTRATO
+                      tipo_plaza: DOCENTE
+                      id_adscripcion: 360
+                      adscripcion: UNIDAD ACADEMICA DE CIENCIAS QUIMICO BIOLOGICAS Y FARMACEUTICAS
+                      // "email": josezep@uan.edu.mx
+                      // "telefono": (311) 103 0265
+                      // "titulo": DR.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                x-examples:
+                  example-1:
+                    status: fail
+                    code: no_auth
+                    data:
+                      message: No has iniciado sesión.
+              examples:
+                Ejemplo-401-Unauthorized:
+                  value:
+                    status: fail
+                    code: no_auth
+                    data:
+                      message: No has iniciado sesión.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                x-examples:
+                  example-1:
+                    status: error
+                    code: no_authz|AccessDeniedHttpException
+                    data:
+                      message: No tienes permisos para realizar esta acción
+              examples:
+                Ejemplo-403-Forbidden:
+                  value:
+                    status: error
+                    code: no_authz|AccessDeniedHttpException
+                    data:
+                      message: No tienes permisos para realizar esta acción
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                x-examples:
+                  example-1:
+                    status: error
+                    code: no_plaza|no_empleado|no_alumno|no_matricula
+                    data:
+                      message: El elemento que buscas no se ha encontrado
+              examples:
+                Ejemplo-404-Not_found:
+                  value:
+                    status: error
+                    code: no_plaza|no_empleado|no_alumno|no_matricula
+                    data:
+                      message: El elemento que buscas no se ha encontrado
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                x-examples:
+                  example-1:
+                    status: error
+                    code: no_expediente
+                    data:
+                      message: Este docente no tiene su expediente digital capturado
+              examples:
+                Ejemplo-409-Conflict:
+                  value:
+                    status: error
+                    code: no_expediente
+                    data:
+                      message: Este docente no tiene su expediente digital capturado
       operationId: get-rh-plazas-id
       description: |-
         Dado un número de plaza, retorna la información básica del empleado y la información básica de la plaza solicitada.
@@ -207,8 +445,122 @@ paths:
                           tipo_plaza: ADMINISTRATIVO
                           id_adscripcion: 397
                           adscripcion: COORDINACION DE ANUIES
-        '400':
-          description: No encontrado
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                x-examples:
+                  example-1:
+                    status: fail
+                    code: no_auth
+                    data:
+                      message: No has iniciado sesión.
+              examples:
+                Ejemplo-401-Unauthorized:
+                  value:
+                    status: fail
+                    code: no_auth
+                    data:
+                      message: No has iniciado sesión.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                x-examples:
+                  example-1:
+                    status: error
+                    code: no_authz|AccessDeniedHttpException
+                    data:
+                      message: No tienes permisos para realizar esta acción
+              examples:
+                Ejemplo-403-Forbidden:
+                  value:
+                    status: error
+                    code: no_authz|AccessDeniedHttpException
+                    data:
+                      message: No tienes permisos para realizar esta acción
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                x-examples:
+                  example-1:
+                    status: error
+                    code: no_plaza|no_empleado|no_alumno|no_matricula
+                    data:
+                      message: El elemento que buscas no se ha encontrado
+              examples:
+                Ejemplo-404-Not_found:
+                  value:
+                    status: error
+                    code: no_plaza|no_empleado|no_alumno|no_matricula
+                    data:
+                      message: El elemento que buscas no se ha encontrado
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                x-examples:
+                  example-1:
+                    status: error
+                    code: no_expediente
+                    data:
+                      message: Este docente no tiene su expediente digital capturado
+              examples:
+                Ejemplo-409-Conflict:
+                  value:
+                    status: error
+                    code: no_expediente
+                    data:
+                      message: Este docente no tiene su expediente digital capturado
       operationId: get-rh-empleados
       description: |-
         Dado un código de trabajador o RFC, retorna la información básica del empleado y la información básica de las plazas asociadas a ese empleado.
@@ -231,6 +583,21 @@ paths:
     get:
       summary: Escolar Matrículas
       tags: []
+      operationId: get-escolar-matriculas
+      description: 'Devuelve una colección de registros de alumnos con matrículas en estatus `CON RECIB`O, `A PAGO`, `PREINSCRITO`, `INSCRITO`.'
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: /escolar/matriculas
+          description: escolar matriculas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+        description: ''
       responses:
         '200':
           description: OK
@@ -239,7 +606,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Alumnos'
               examples:
-                example-1:
+                Ejemplo-Matrículas:
                   value:
                     status: success
                     data:
@@ -262,51 +629,158 @@ paths:
                         - periodo
                         - estatus
                       entries:
-                        - - JAIME
-                          - BECERRA
-                          - KEILY YULIANA
-                          - JABK060320MNTMCLA3
-                          - M
-                          - '21016619'
-                          - 1913
-                          - PREPARATORIA 01
-                          - B
-                          - 0
-                          - AGO2021
-                          - A PAGO
-                        - - IBARRA
-                          - ALCANTARA
-                          - CRISTOPHER RAFAEL
-                          - IAAC031216HDGBLRA3
-                          - H
-                          - 16010796L
-                          - 6394
-                          - COMUNICACIÓN Y MEDIOS
-                          - L
-                          - 0
-                          - AGO2021
-                          - INSCRITO
-                        - - LUGO
-                          - GARCIA
-                          - MIRIAM JOCELYN
-                          - LUGM820111MDFGRR08
-                          - M
-                          - '20009067'
-                          - 7813
-                          - 'DERECHO [Virtual]'
-                          - L
-                          - 5
-                          - AGO2020
-                          - INSCRITO
-          headers: {}
-      operationId: get-escolar-matriculas
-      description: 'Devuelve una colección de registros de alumnos con matrículas en estatus `CON RECIB`O, `A PAGO`, `PREINSCRITO`, `INSCRITO`.'
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: /escolar/matriculas
-          description: escolar matriculas
+                        - JAIME
+                        - BECERRA
+                        - KEILY YULIANA
+                        - JABK060320MNTMCLA3
+                        - M
+                        - '21016619'
+                        - 1913
+                        - PREPARATORIA 01
+                        - B
+                        - 0
+                        - AGO2021
+                        - A PAGO
+                        - IBARRA
+                        - ALCANTARA
+                        - CRISTOPHER RAFAEL
+                        - IAAC031216HDGBLRA3
+                        - H
+                        - 16010796L
+                        - 6394
+                        - COMUNICACIÓN Y MEDIOS
+                        - L
+                        - 0
+                        - AGO2021
+                        - INSCRITO
+                        - LUGO
+                        - GARCIA
+                        - MIRIAM JOCELYN
+                        - LUGM820111MDFGRR08
+                        - M
+                        - '20009067'
+                        - 7813
+                        - 'DERECHO [Virtual]'
+                        - L
+                        - 5
+                        - AGO2020
+                        - INSCRITO
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                x-examples:
+                  example-1:
+                    status: fail
+                    code: no_auth
+                    data:
+                      message: No has iniciado sesión.
+              examples:
+                Ejemplo-401-Unauthorized:
+                  value:
+                    status: fail
+                    code: no_auth
+                    data:
+                      message: No has iniciado sesión.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                x-examples:
+                  example-1:
+                    status: error
+                    code: no_authz|AccessDeniedHttpException
+                    data:
+                      message: No tienes permisos para realizar esta acción
+              examples:
+                Ejemplo-403-Forbidden:
+                  value:
+                    status: error
+                    code: no_authz|AccessDeniedHttpException
+                    data:
+                      message: No tienes permisos para realizar esta acción
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                x-examples:
+                  example-1:
+                    status: error
+                    code: no_plaza|no_empleado|no_alumno|no_matricula
+                    data:
+                      message: El elemento que buscas no se ha encontrado
+              examples:
+                Ejemplo-404-Not_found:
+                  value:
+                    status: error
+                    code: no_plaza|no_empleado|no_alumno|no_matricula
+                    data:
+                      message: El elemento que buscas no se ha encontrado
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                x-examples:
+                  example-1:
+                    status: error
+                    code: no_expediente
+                    data:
+                      message: Este docente no tiene su expediente digital capturado
+              examples:
+                Ejemplo-409-Conflict:
+                  value:
+                    status: error
+                    code: no_expediente
+                    data:
+                      message: Este docente no tiene su expediente digital capturado
   '/escolar/matriculas/{MATRICULA}':
     parameters:
       - schema:
@@ -325,26 +799,30 @@ paths:
               schema:
                 $ref: '#/components/schemas/Alumnos'
               examples:
-                example-1:
+                Ejemplo-Matrícula:
                   value:
-                    appat: string
-                    apma: string
-                    nombres: string
-                    curp: string
-                    sexo: string
-                    matricula: string
-                    id_carrera: 0
-                    carrera: string
-                    nivel: '''L: Licenciatura o Prof Asoc, B:Bachillerato, P:Posgrado'''
-                    modalidad: '''0: Escolarizado, 1: SemiEscolarizado, 5: Virtual (en línea)'''
-                    periodo: string
-                    estatus: ('ADMITIDO')
+                    status: success
+                    data:
+                      appat: JAIME
+                      apmat: BECERRA
+                      nombres: KEILY YULIANA
+                      curp: JABK060320MNTMCLA3
+                      sexo: M
+                      matricula: '21016619'
+                      id_carrera: 1913
+                      carrera: PREPARATORIA 01
+                      nivel: B
+                      modalidad: 0
+                      periodo: AGO2021
+                      estatus: A PAGO
+                      // "email": josezep@uan.edu.mx
+                      // "telefono": (311) 103 0265
             application/xml:
               schema:
                 $ref: '#/components/schemas/Alumnos'
               examples:
                 example-1:
-                  value: |-
+                  value: |
                     {
                         "status": "success",
                         "data": {
@@ -364,8 +842,122 @@ paths:
                             // "telefono": "(311) 103 0265",
                         }
                     }
-        '400':
-          description: 404 no encontrado
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                x-examples:
+                  example-1:
+                    status: fail
+                    code: no_auth
+                    data:
+                      message: No has iniciado sesión.
+              examples:
+                Ejemplo-401-Unauthorized:
+                  value:
+                    status: fail
+                    code: no_auth
+                    data:
+                      message: No has iniciado sesión.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                x-examples:
+                  example-1:
+                    status: error
+                    code: no_authz|AccessDeniedHttpException
+                    data:
+                      message: No tienes permisos para realizar esta acción
+              examples:
+                Ejemplo-403-Forbidden:
+                  value:
+                    status: error
+                    code: no_authz|AccessDeniedHttpException
+                    data:
+                      message: No tienes permisos para realizar esta acción
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                x-examples:
+                  example-1:
+                    status: error
+                    code: no_plaza|no_empleado|no_alumno|no_matricula
+                    data:
+                      message: El elemento que buscas no se ha encontrado
+              examples:
+                Ejemplo-404-Not_Found:
+                  value:
+                    status: string
+                    code: string
+                    data:
+                      message: string
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                x-examples:
+                  example-1:
+                    status: error
+                    code: no_expediente
+                    data:
+                      message: Este docente no tiene su expediente digital capturado
+              examples:
+                Ejemplo-409-Conflict:
+                  value:
+                    status: error
+                    code: no_expediente
+                    data:
+                      message: Este docente no tiene su expediente digital capturado
       operationId: get-escolar-matriculas-id
       description: |-
         Dada una matrícula, retorna la información básica del alumno y la información básica de la matrícula solicitada.
@@ -394,14 +986,12 @@ paths:
       responses:
         '200':
           description: OK
-        '400':
-          description: No econtrado
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Alumnos'
               examples:
-                example-1:
+                Ejemplo-CURP:
                   value:
                     status: success
                     data:
@@ -427,6 +1017,122 @@ paths:
                           modalidad: 5
                           periodo: AGO2020
                           estatus: INSCRITO
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                x-examples:
+                  example-1:
+                    status: fail
+                    code: no_auth
+                    data:
+                      message: No has iniciado sesión.
+              examples:
+                Ejemplo-401-Unauthorized:
+                  value:
+                    status: fail
+                    code: no_auth
+                    data:
+                      message: No has iniciado sesión.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                x-examples:
+                  example-1:
+                    status: error
+                    code: no_authz|AccessDeniedHttpException
+                    data:
+                      message: No tienes permisos para realizar esta acción
+              examples:
+                Ejemplo-403-Forbidden:
+                  value:
+                    status: error
+                    code: no_authz|AccessDeniedHttpException
+                    data:
+                      message: No tienes permisos para realizar esta acción
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                x-examples:
+                  example-1:
+                    status: error
+                    code: no_plaza|no_empleado|no_alumno|no_matricula
+                    data:
+                      message: El elemento que buscas no se ha encontrado
+              examples:
+                Ejemplo-404-Not_Found:
+                  value:
+                    status: error
+                    code: no_plaza|no_empleado|no_alumno|no_matricula
+                    data:
+                      message: El elemento que buscas no se ha encontrado
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                x-examples:
+                  example-1:
+                    status: error
+                    code: no_expediente
+                    data:
+                      message: Este docente no tiene su expediente digital capturado
+              examples:
+                Ejemplo-409-Conflict:
+                  value:
+                    status: error
+                    code: no_expediente
+                    data:
+                      message: Este docente no tiene su expediente digital capturado
       operationId: get-escolar-alumnos-id
       description: |-
         Dada una CURP, retorna la información básica del alumno y la información básica de las matrículas asociadas a ese alumno.
@@ -440,127 +1146,211 @@ paths:
           description: ' Escolar alumnos CURP'
 components:
   schemas:
+    Alumnos:
+      type: object
+      x-examples:
+        example-1:
+          appat: string
+          apmat: string
+          nombres: string
+          curp: string
+          sexo: ('F')
+          matricula: string
+          id_carrera: integer
+          carrera: string
+          nivel: ('L')
+          modalidad: '0 Escolarizado, 1 SemiEscolarizado, 5 Virtual (en línea)'
+          periodo: strings
+          estatus: ('ADMITIDO')
+      description: Modelo alumnos
+      title: Alumnos
+      examples:
+        - appat: string
+          apmat: string
+          nombres: string
+          curp: string
+          sexo: string
+          matricula: string
+          id_carrera: integer
+          carrera: string
+          nivel: string
+          modalidad: integer
+          periodo: string
+          estatus: string
+      properties:
+        appat:
+          type: string
+          example: JAIME
+        apmat:
+          type: string
+          example: BECERRA
+        nombres:
+          type: string
+          example: KEILY YULIANA
+        curp:
+          type: string
+          example: JABK060320MNTMCLA3
+          maxLength: 18
+        sexo:
+          type: string
+          minLength: 1
+          maxLength: 1
+          example: M
+          description: '''F: Femenino M: Masculino'''
+          enum:
+            - F
+            - M
+        matricula:
+          type: string
+          example: '21010796'
+        id_carrera:
+          example: 6394
+          type: integer
+        carrera:
+          type: string
+          example: COMUNICACIÓN Y MEDIOS
+        nivel:
+          type: string
+          example: L
+          description: '''L: Licenciatura o Prof Asoc, B:Bachillerato, P:Posgrado'''
+          enum:
+            - L
+            - B
+            - P
+        modalidad:
+          type: integer
+          example: 1
+          description: '''0: Escolarizado, 1: SemiEscolarizado, 5: Virtual (en línea)'''
+        periodo:
+          type: string
+          example: AGO2021
+        estatus:
+          type: string
+          example: INSCRITO
+          description: '(''ADMITIDO'',''CON RECIBO'',''PREINSCRITO'',''INSCRITO'',''A PAGO'',''BAJA TEMPORAL'',''EGRESADO'',''BAJA DEFINITIVA'',''CAMBIO DE CARRERA'',''COMPLEMENTO'',''EN TRAMITE'',''EN TRAMITE2'',''--'')'
+          enum:
+            - ADMITIDO
+            - CON RECIBO
+            - PREINSCRITO
+            - INSCRITO
+            - A PAGO
+            - BAJA TEMPORAL
+            - EGRESADO
+            - BAJA DEFINITIVA
+            - CAMBIO DE CARRERA
+            - COMPLEMENTO
+            - EN TRAMITE
+            - EN TRAMITE2
+            - '''--'''
+      required:
+        - appat
+        - apmat
+        - nombres
+        - curp
+        - sexo
+        - matricula
+        - id_carrera
+        - carrera
+        - nivel
+        - modalidad
+        - periodo
+        - estatus
     Personal:
       type: object
       x-examples:
         example-1:
-          no_trab: 14391
-          rfc: AIRT6710235K5
-          curp: AIRT671023MDFCRS03
-          appat: LADRON DE GUEVARA
-          apmat: DE LA TEJERA
-          nombres: ASUNCIÓN MARIA DEL CONSUELO
-          fecha_nac: '1967-10-23'
-          sexo: F
-          no_empleado: 53255
-          estatus: ACTIVO
-          tipo_empleado: CONTRATO
-          tipo_plaza: DOCENTE
-          id_adscripcion: 360
-          adscripcion: UNIDAD ACADEMICA DE CIENCIAS QUIMICO BIOLOGICAS Y FARMACEUTICAS
-      title: Personal
-      description: Modelo personal
-      additionalProperties: false
+          no_trab: integer
+          rfc: string
+          curp: string
+          appat: string
+          apmat: string
+          nombres: string
+          fecha_nac: string
+          sexo: string
+          no_empleado: integer
+          estatus: string
+          tipo_empleado: string
+          tipo_plaza: string
+          id_adscripcion: integer
+          adscripcion: string
       examples:
-        - no_trab: 14391
-          rfc: AIRT6710235K5
-          curp: AIRT671023MDFCRS03
-          appat: LADRON DE GUEVARA
-          apmat: DE LA TEJERA
-          nombres: ASUNCIÓN MARIA DEL CONSUELO
-          fecha_nac: '1967-10-23'
-          sexo: F
-          no_empleado: 53255
-          estatus: ACTIVO
-          tipo_empleado: CONTRATO
-          tipo_plaza: DOCENTE
-          id_adscripcion: 360
-          adscripcion: RECTORIA
+        - no_trab: integer
+          rfc: string
+          curp: string
+          appat: string
+          apmat: string
+          nombres: string
+          fecha_nac: string
+          sexo: string
+          no_empleado: integer
+          estatus: string
+          tipo_empleado: string
+          tipo_plaza: string
+          id_adscripcion: integer
+          adscripcion: string
+      description: Modelo personal
+      title: Personal
       properties:
         no_trab:
           type: integer
           example: 14391
-          minimum: 1
-          exclusiveMaximum: false
         rfc:
           type: string
           example: AIRT6710235K5
-          minLength: 12
-          maxLength: 13
-          pattern: '^([A-ZÑ]|\&){3,4}[0-9]{2}(0[1-9]|1[0-2])([12][0 -9]|0[1-9]|3[01])[A-Z0-9]{3}$'
         curp:
           type: string
           example: AIRT671023MDFCRS03
-          minLength: 18
-          maxLength: 18
-          pattern: '^[A-Z][AEIOUX][A-Z]{2}[\d]{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])[HM](AS|BC|BS|CC|CS|CH|CL|CM|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[\dA-Z]\d$'
         appat:
           type: string
           example: LADRON DE GUEVARA
-          maxLength: 40
-          x-faker: faker.name.lastName()
         apmat:
           type: string
           example: DE LA TEJERA
-          maxLength: 40
-          x-faker: faker.name.lastName()
         nombres:
           type: string
           example: ASUNCIÓN MARIA DEL CONSUELO
-          maxLength: 40
-          x-faker: faker.name.firstName()
         fecha_nac:
           type: string
-          format: date
           example: '1967-10-23'
-          pattern: '^\d{4}-\d{2}-\d{2}'
+          format: date
+          description: yyyy-MM-dd
         sexo:
           type: string
+          example: F
+          description: F Femenino M  Masculino
           enum:
             - F
             - M
-          example: F
-          description: 'F: Femenino M: Masculino'
         no_empleado:
           type: integer
           example: 53255
-          minimum: 1
-          format: int32
-          exclusiveMaximum: 300000
         estatus:
           type: string
+          example: ACTIVO
           enum:
             - ACTIVO
             - BAJA DEFINITIVA
             - BAJA TEMPORAL
             - CONTRATO VENCIDO
-          example: ACTIVO
         tipo_empleado:
           type: string
+          example: BASE
           enum:
             - BASE
             - CONTRATO
             - JUBILADO
-            - EXTERNO
-          example: CONTRATO
         tipo_plaza:
           type: string
+          example: DOCENTE
           enum:
             - ADMINISTRATIVO
             - DOCENTE
-          example: DOCENTE
         id_adscripcion:
           type: integer
           example: 360
-          format: int32
-          exclusiveMaximum: 1100
-          minimum: 10
         adscripcion:
           type: string
-          example: RECTORIA
-          maxLength: 40
-        '':
-          type: string
+          example: UNIDAD ACADEMICA DE CIENCIAS QUIMICO BIOLOGICAS Y FARMACEUTICAS
       required:
         - no_trab
         - rfc
@@ -576,101 +1366,6 @@ components:
         - tipo_plaza
         - id_adscripcion
         - adscripcion
-      readOnly: true
-    Alumnos:
-      type: object
-      x-examples:
-        example-1:
-          appat: string
-          apma: string
-          nombres: string
-          curp: string
-          sexo: ('F')
-          matricula: string
-          id_carrera: integer
-          carrera: string
-          nivel: ('L')
-          modalidad: ' ''0: Escolarizado, 1: SemiEscolarizado, 5: Virtual (en línea)'
-          periodo: strings
-          estatus: ('ADMITIDO')
-      description: Modelo alumnos
-      title: Alumnos
-      properties:
-        appat:
-          type: string
-        apma:
-          type: string
-        nombres:
-          type: string
-        curp:
-          type: string
-        sexo:
-          type: string
-          minLength: 1
-          maxLength: 1
-          enum:
-            - '(''F'',''M'')'
-          example: 'F:Femenino M:Masculino'
-        matricula:
-          type: string
-        id_carrera:
-          type: integer
-        carrera:
-          type: string
-        nivel:
-          type: string
-          minLength: 1
-          maxLength: 1
-          enum:
-            - L
-            - B
-            - P
-        modalidad:
-          type: integer
-          example: 0
-        periodo:
-          type: string
-        estatus:
-          type: string
-          enum:
-            - ADMITIDO
-            - CON RECIBO
-            - PREINSCRITO
-            - INSCRITO
-            - A PAGO
-            - BAJA TEMPORAL
-            - EGRESADO
-            - BAJA DEFINITIVA
-            - CAMBIO DE CARRERA
-            - COMPLEMENTO
-            - EN TRAMITE
-            - EN TRAMITE2
-      required:
-        - appat
-        - apma
-        - nombres
-        - curp
-        - sexo
-        - matricula
-        - id_carrera
-        - carrera
-        - nivel
-        - modalidad
-        - periodo
-        - estatus
-      examples:
-        - appat: string
-          apma: string
-          nombres: string
-          curp: string
-          sexo: 'F:Femenino M:Masculino'
-          matricula: string
-          id_carrera: 0
-          carrera: string
-          nivel: L
-          modalidad: 0
-          periodo: string
-          estatus: ADMITIDO
     Response:
       type: object
       x-examples:
@@ -679,23 +1374,20 @@ components:
           data:
             param: uno
             message: pong
-      properties:
-        status:
-          type: string
-        data:
-          type: object
-          properties:
-            '':
-              type: string
-      required:
-        - status
-        - data
       examples:
         - status: string
           data:
             '': string
       title: Response
       description: Modelo response
+      properties:
+        status:
+          type: string
+        data:
+          type: object
+      required:
+        - status
+        - data
   securitySchemes:
     Certificado:
       type: http
@@ -711,21 +1403,7 @@ components:
       content:
         application/json:
           schema:
-            type: object
-            x-examples:
-              example-1:
-                status: success
-                data:
-                  param: uno
-                  message: pong
-            properties:
-              status:
-                type: string
-              data:
-                type: object
-            required:
-              - status
-              - data
+            $ref: '#/components/schemas/Response'
           examples:
             ejemplo-ping:
               value:
@@ -733,45 +1411,43 @@ components:
                 data:
                   message: pong
     succes-personal:
-      description: Example response
+      description: succes-personal
       content:
         application/json:
           schema:
             type: object
-            x-examples:
-              example-1:
-                status: success
-                data: {}
             properties:
               status:
                 type: string
-                default: success
               data:
                 $ref: '#/components/schemas/Personal'
-            required:
-              - status
-              - data
           examples:
-            example-1:
-              value:
-                status: success
-                data:
-                  no_trab: 14391
-                  rfc: AIRT6710235K5
-                  curp: AIRT671023MDFCRS03
-                  appat: LADRON DE GUEVARA
-                  apmat: DE LA TEJERA
-                  nombres: ASUNCIÓN MARIA DEL CONSUELO
-                  fecha_nac: '1967-10-23'
-                  sexo: F
-                  no_empleado: 53255
-                  estatus: ACTIVO
-                  tipo_empleado: CONTRATO
-                  tipo_plaza: DOCENTE
-                  id_adscripcion: 360
-                  adscripcion: RECTORIA
+            ejemplo-personal:
+              value: |-
+                {
+                    "status": "success",
+                    "data": {
+                        "no_trab": 14391,
+                        "rfc": "AIRT6710235K5",
+                        "curp": "AIRT671023MDFCRS03",
+                        "appat": "LADRON DE GUEVARA",
+                        "apmat": "DE LA TEJERA",
+                        "nombres": "ASUNCIÓN MARIA DEL CONSUELO",
+                        "fecha_nac": "1967-10-23",
+                        "sexo": "F",
+                        "no_empleado": 53255,
+                        "estatus": "ACTIVO",
+                        "tipo_empleado": "CONTRATO",
+                        "tipo_plaza": "DOCENTE",
+                        "id_adscripcion": 360,
+                        "adscripcion": "UNIDAD ACADEMICA DE CIENCIAS QUIMICO BIOLOGICAS Y FARMACEUTICAS"
+                        // "email": "josezep@uan.edu.mx",
+                        // "telefono": "(311) 103 0265",
+                        // "titulo": "DR."
+                    }
+                }
     succes-alumnos:
-      description: Example response
+      description: succes-alumnos
       content:
         application/json:
           schema:
@@ -782,22 +1458,22 @@ components:
               data:
                 $ref: '#/components/schemas/Alumnos'
           examples:
-            example-1:
+            ejemplo-alumnos:
               value:
                 status: string
                 data:
-                  appat: string
-                  apma: string
-                  nombres: string
-                  curp: string
-                  sexo: 'F:Femenino M:Masculino'
-                  matricula: string
-                  id_carrera: 0
-                  carrera: string
-                  nivel: L
-                  modalidad: 0
-                  periodo: string
-                  estatus: ADMITIDO
+                  appat: JAIME
+                  apmat: BECERRA
+                  nombres: KEILY YULIANA
+                  curp: JABK060320MNTMCLA3
+                  sexo: M
+                  matricula: '21016619'
+                  id_carrera: 1913
+                  carrera: PREPARATORIA 01
+                  nivel: B
+                  modalidad: 1
+                  periodo: AGO2021
+                  estatus: A PAGO
                   // "email": josezep@uan.edu.mx
                   // "telefono": (311) 103 0265
 security:
